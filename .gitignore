@@ -1,0 +1,16 @@
+.metadata
+.recommenders
+.settings
+RemoteSystemsTempFiles
+*.class
+.classpath
+.project
+target
+bin/
+rebel.xml
+.mvn*
+mvnw*
+Servers
+/.metadata
+/RemoteSystemsTempFiles
+/Servers
