@@ -1,6 +1,7 @@
 package br.com.casadocodigo.loja.dao;
 
 import java.math.BigDecimal;
+import java.util.Calendar;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -19,7 +20,7 @@ public class ProdutoDAO {
 
 	@PersistenceContext
 	private EntityManager manager;
-	
+
 	public void gravar(Produto produto) {
 		manager.persist(produto);
 	}
@@ -29,16 +30,32 @@ public class ProdutoDAO {
 				.getResultList();
 	}
 
-	public Produto find(Integer id) {
-        return manager.createQuery("select distinct(p) from Produto p join fetch p.precos precos where p.id = :id", 
-        		Produto.class).setParameter("id", id)
-        		.getSingleResult();
+	public List<Produto> filtrar(Calendar dataLancamento) {
+
+		StringBuilder hql = new StringBuilder("select distinct(p) from Produto p join fetch p.precos ");
+
+		if (dataLancamento != null) {
+			hql.append("where p.dataLancamento >= :dataFiltro");
+		}
+
+		TypedQuery<Produto> query = manager.createQuery(hql.toString(), Produto.class);
+
+		if (dataLancamento != null) {
+			query.setParameter("dataFiltro", dataLancamento);
+		}
+		return query.getResultList();
 	}
-	
-	public BigDecimal somaPrecosPorTipo(TipoPreco tipoPreco){
-	    TypedQuery<BigDecimal> query = manager.createQuery("select sum(preco.valor) from Produto p join p.precos preco "
-	    		+ "where preco.tipo = :tipoPreco", BigDecimal.class);
-	    query.setParameter("tipoPreco", tipoPreco);
-	    return query.getSingleResult();
+
+	public Produto find(Integer id) {
+		return manager.createQuery("select distinct(p) from Produto p join fetch p.precos precos where p.id = :id",
+				Produto.class).setParameter("id", id).getSingleResult();
+	}
+
+	public BigDecimal somaPrecosPorTipo(TipoPreco tipoPreco) {
+		TypedQuery<BigDecimal> query = manager.createQuery(
+				"select sum(preco.valor) from Produto p join p.precos preco " + "where preco.tipo = :tipoPreco",
+				BigDecimal.class);
+		query.setParameter("tipoPreco", tipoPreco);
+		return query.getSingleResult();
 	}
 }
