@@ -40,9 +40,10 @@ import br.com.casadocodigo.loja.controllers.HomeController;
 import br.com.casadocodigo.loja.dao.ProdutoDAO;
 import br.com.casadocodigo.loja.infra.FileSaver;
 import br.com.casadocodigo.loja.models.CarrinhoCompras;
+import br.com.casadocodigo.loja.service.PedidoService;
 
 @EnableWebMvc
-@ComponentScan(basePackageClasses = { HomeController.class, ProdutoDAO.class, FileSaver.class, CarrinhoCompras.class })
+@ComponentScan(basePackageClasses = { HomeController.class, ProdutoDAO.class, PedidoService.class, FileSaver.class, CarrinhoCompras.class })
 @EnableCaching
 @EnableAspectJAutoProxy(proxyTargetClass = true) 
 public class AppWebConfiguration extends WebMvcConfigurerAdapter {
