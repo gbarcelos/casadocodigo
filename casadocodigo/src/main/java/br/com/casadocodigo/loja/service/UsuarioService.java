@@ -8,8 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import br.com.casadocodigo.loja.dao.RoleDAO;
 import br.com.casadocodigo.loja.dao.UsuarioDAO;
 import br.com.casadocodigo.loja.exception.EmailUsuarioJaCadastradoException;
+import br.com.casadocodigo.loja.models.Role;
 import br.com.casadocodigo.loja.models.Usuario;
 
 @Service
@@ -19,7 +21,22 @@ public class UsuarioService {
 	private UsuarioDAO dao;
 	
 	@Autowired
+	private RoleDAO roleDao;
+	
+	@Autowired
 	private PasswordEncoder passwordEncoder;
+	
+	public List<Usuario> listar() {
+		return dao.listar();
+	}
+	
+	public Usuario getUsuarioById(Long id) {
+		return dao.getUsuarioById(id);
+	}
+
+	public List<Role> getRoles() {
+		return roleDao.listar();
+	}
 
 	@Transactional
 	public void salvar(Usuario usuario) {
@@ -34,8 +51,17 @@ public class UsuarioService {
 		
 		dao.salvar(usuario);
 	}
+	
+	@Transactional
+	public void salvarPermissoes(Usuario usuario) {
 
-	public List<Usuario> listar() {
-		return dao.listar();
+		Usuario usuarioBanco = dao.getUsuarioById(usuario.getCodigo());
+
+		if (usuarioBanco != null) {
+
+			usuarioBanco.setRoles(usuario.getRoles());
+
+			dao.salvar(usuarioBanco);
+		}
 	}
 }

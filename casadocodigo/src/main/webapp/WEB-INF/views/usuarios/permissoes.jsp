@@ -1,24 +1,20 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="s"%>
-<%@ taglib uri="http://www.springframework.org/security/tags" prefix="security" %>
-
+<%@ taglib uri="http://www.springframework.org/security/tags" prefix="security"%>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-
+<meta charset="UTF-8">
+<title>Livros de Java, Android, iPhone, Ruby, PHP e muito mais - Casa do Código</title>
 <c:url value="/resources/css" var="cssPath" />
 <link rel="stylesheet" href="${cssPath}/bootstrap.min.css" />
 <link rel="stylesheet" href="${cssPath}/bootstrap-theme.min.css" />
-
-<title>Livros de Java, Android, iPhone, Ruby, PHP e muito mais - Casa do Código</title>
 </head>
-<body>
-
+<body> 
 	<nav class="navbar navbar-inverse">
 	  <div class="container">
 	    <div class="navbar-header">
@@ -34,8 +30,7 @@
 	      <ul class="nav navbar-nav">
 	        <li class="nav-item"><a href="${s:mvcUrl('PC#listar').build()}">Lista de Produtos</a></li>
 	        <li class="nav-item"><a href="${s:mvcUrl('PC#form').build()}">Cadastro de Produtos</a></li>
-	        <li class="nav-item"><a href="${s:mvcUrl('pedidos_lista').build()}">Lista de Pedidos</a></li>
-	        <li class="nav-item"><a href="${s:mvcUrl('usuarios_lista').build()}">Lista de Usuários</a></li>
+	        <li class="nav-item"><a href="${s:mvcUrl('UC#form').build()}">Cadastro de Usuários</a></li>
 	      </ul>
 	      <ul class="nav navbar-nav navbar-right">
 	      	 <li class="nav-item">
@@ -53,34 +48,18 @@
 	</nav>
 
 	<div class="container">
-		<h1>Lista de Usuários</h1>
-		<p> ${sucesso} </p>
-		<p> ${falha} </p>
-		<table class="table table-bordered table-striped table-hover">
-			<tr>
-				<th>Nome</th>
-				<th>Email</th>
-				<th>Roles</th>
-				<th></th>
-			</tr>
-			<c:forEach items="${usuarios}" var="usuario">
-				<tr>
-					<td>${usuario.nome}</td>
-					<td>${usuario.email}</td>
-					<td>
-						<c:if test="${not empty usuario.roles}">
-						    ${usuario.roles}
-						</c:if>
-					</td>
-					<td class="text-center">
-						<a class="btn btn-link" title="Adicionar permissoes" href="${s:mvcUrl('UC#permissoes').arg(0,usuario.codigo).build() }" > 
-							<i class="glyphicon glyphicon-plus-sign"></i>
-						</a>
-					</td>
-				</tr>
-			</c:forEach>
-		</table>
-		<a class="btn btn-primary" href="${s:mvcUrl('UC#form').build() }">Novo Usuário</a>
+		<h1>Cadastro de Permissões para ${usuario.nome}</h1>
+		<form:form action="${s:mvcUrl('UC#salvarPermissoes').build() }" method="post" commandName="usuario" enctype="multipart/form-data">
+
+			<form:hidden path="codigo" />
+
+			<div class="form-group">
+				<label>Permissões</label>
+				<form:checkboxes items="${roles}" path="roles" />				
+				<form:errors path="roles" />
+			</div>
+			<button type="submit" class="btn btn-primary">Atualizar Permissões</button>
+		</form:form>
 	</div>
 </body>
 </html>

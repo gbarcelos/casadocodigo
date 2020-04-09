@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
@@ -59,7 +60,29 @@ public class UsuariosController {
 			return form(usuario);
 		}
 
-		redirectAttributes.addFlashAttribute("message", "Usuário cadastrado com sucesso!");
+		redirectAttributes.addFlashAttribute("sucesso", "Usuário cadastrado com sucesso!");
+		return new ModelAndView("redirect:/usuarios");
+	}
+
+	@RequestMapping("/{codigo}/permissoes")
+	public ModelAndView permissoes(@PathVariable Long codigo) {
+
+		ModelAndView modelAndView = new ModelAndView("usuarios/permissoes");
+		modelAndView.addObject("roles", service.getRoles());
+
+		Usuario usuario = service.getUsuarioById(codigo);
+		if (usuario != null) {
+			modelAndView.addObject(usuario);
+		}
+		return modelAndView;
+	}
+
+	@RequestMapping(value = { "/permissoes" }, method = RequestMethod.POST)
+	public ModelAndView salvarPermissoes(Usuario usuario, BindingResult result, RedirectAttributes redirectAttributes) {
+
+		service.salvarPermissoes(usuario);
+
+		redirectAttributes.addFlashAttribute("sucesso", "Permissões alteradas com sucesso!");
 		return new ModelAndView("redirect:/usuarios");
 	}
 }

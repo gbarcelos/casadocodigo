@@ -51,4 +51,9 @@ public class UsuarioDAO implements UserDetailsService {
 	public List<Usuario> listar() {
 		return manager.createQuery("select u from Usuario u ", Usuario.class).getResultList();
 	}
+
+	public Usuario getUsuarioById(Long id) {
+		return manager.createQuery("select u from Usuario u where codigo = :id", Usuario.class)
+				.setParameter("id", id).getSingleResult();
+	}
 }

@@ -6,18 +6,18 @@ import javax.persistence.Id;
 import org.springframework.security.core.GrantedAuthority;
 
 @Entity
-public class Role implements GrantedAuthority{
+public class Role implements GrantedAuthority {
 
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = -4028331798580545177L;
 
 	@Id
 	private String nome;
-	
-	public Role(){
+
+	public Role() {
 	}
 
 	public Role(String nome) {
-	  this.nome = nome;
+		this.nome = nome;
 	}
 
 	public String getNome() {
@@ -31,5 +31,10 @@ public class Role implements GrantedAuthority{
 	@Override
 	public String getAuthority() {
 		return this.nome;
+	}
+
+	@Override
+	public String toString() {
+		return nome;
 	}
 }
